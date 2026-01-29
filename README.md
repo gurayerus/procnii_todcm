@@ -4,10 +4,6 @@ Convert processed NIfTI files (`.nii` / `.nii.gz`) to DICOM using
 `nibabel` and `nii2dcm`.
 
 ## Installation 
-
-[!NOTE]
-Package installed in a mamba environment. Replace "mamba" to "conda" for using a conda environment.
-
 ```bash
 mamba create -n procnii python=3.14
 mamba activate procnii
@@ -15,6 +11,8 @@ git clone https://github.com/gurayerus/procnii_todcm
 cd procnii_todcm
 pip install -e .
 ```
+>[!NOTE]
+>Package will be installed in a mamba environment. Replace "mamba" to "conda" for using a conda environment.
 
 ### Verify
 ```bash
@@ -33,5 +31,5 @@ procnii_todcm \
     --out ./test/output/subj1/subj1_merged.nii.gz
 ```
 
-[!WARNING]
-nii2dcm may print multiple "warning" messages. Check for "nii2dcm: DICOM files written to: ..." at the final line of the output messages
+>[!WARNING]
+>nii2dcm may print multiple "warning" messages. Check for "nii2dcm: DICOM files written to: ..." at the end of the output message
