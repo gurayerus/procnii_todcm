@@ -51,7 +51,7 @@ def quantize_from_percentile_mapping(image, percentile_map, mask=None):
     return quantized
 
 
-def main(t1_nifti, seg_nifti, mapping_file, output_nifti):
+def merge_images(t1_nifti, seg_nifti, mapping_file, output_nifti):
     # Load images
     t1_img = nib.load(t1_nifti)
     seg_img = nib.load(seg_nifti)
