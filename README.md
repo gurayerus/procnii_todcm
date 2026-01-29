@@ -1,6 +1,6 @@
 # procnii_todcm
 
-Convert processed NIfTI files (`.nii` / `.nii.gz`) to DICOM using
+Converts processed NIfTI files (`.nii` / `.nii.gz`) to DICOM using
 `nibabel` and `nii2dcm`.
 
 ## Installation 
