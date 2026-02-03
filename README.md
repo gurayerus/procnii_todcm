@@ -1,7 +1,9 @@
 # procnii_todcm
 
-Convert processed NIfTI files (`.nii` / `.nii.gz`) to DICOM using
-`nibabel` and `nii2dcm`.
+Converts processed NIfTI files (`.nii` / `.nii.gz`) to DICOM using `nibabel` and `nii2dcm`.
+
+>[!NOTE]
+>Current functionality is limited to merging a segmentation mask to an underlay image and saving the result as dicom
 
 ## Installation 
 ```bash
