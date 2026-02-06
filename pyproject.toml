@@ -15,9 +15,9 @@ authors = [
 ]
 
 dependencies = [
-  "nibabel==5.3.3",
-  "nii2dcm==0.1.1",
-  "numpy==2.4.1"
+  "nibabel==5.0.0",
+  #"nii2dcm==0.1.1",    ## due to bug, we use a patched version; see installation info in README
+  "numpy==1.23.2"
 ]
 
 [project.scripts]

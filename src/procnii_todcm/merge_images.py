@@ -52,45 +52,72 @@ def quantize_from_percentile_mapping(image, percentile_map, mask=None):
 
 
 def merge_images(t1_nifti, seg_nifti, mapping_file, output_nifti):
-    # Load images
-    t1_img = nib.load(t1_nifti)
-    seg_img = nib.load(seg_nifti)
+    # Check input
+    flag_mask = 1
+    if seg_nifti is None:
+        print(f'Info: no mask image; I skip masking')
+        flag_mask = 0
+        
+    if mapping_file is None:
+        print(f'Info: no mapping file; I skip masking')
+        flag_mask = 0
+    
+    # Load ulay image
+    try:
+        t1_img = nib.load(t1_nifti)
+        t1_data = t1_img.get_fdata()
+    except:
+        print(f'Error: could not load underlay image: {t1_img}')
+        return
+    
+    if flag_mask == 1:
+        # Load olay image
+        try:
+            seg_img = nib.load(seg_nifti)
+            seg_data = seg_img.get_fdata()
+        except:
+            print(f'Error: could not load mask image: {seg_img}')
+            return
 
-    t1_data = t1_img.get_fdata()
-    seg_data = seg_img.get_fdata()
+        # Load mapping JSON
+        try:
+            with open(mapping_file, "r") as f:
+                mapping = json.load(f)
+        except:
+            print(f'Error: could not load mapping file: {mapping_file}')
+            return
 
-    if t1_data.shape != seg_data.shape:
-        raise ValueError("T1 and segmentation images must match in shape")
+        # Check img and mask size
+        if t1_data.shape != seg_data.shape:
+            raise ValueError("T1 and segmentation images must match in shape")
 
-    # Load mapping JSON
-    with open(mapping_file, "r") as f:
-        mapping = json.load(f)
+        t1_mapping = mapping["t1_mapping"]
+        seg_mapping = mapping["segmentation_mapping"]
 
-    t1_mapping = mapping["t1_mapping"]
-    seg_mapping = mapping["segmentation_mapping"]
+        # Quantize T1 using percentile mapping
+        quantified = quantize_from_percentile_mapping(
+            t1_data,
+            percentile_map=t1_mapping
+        )
 
-    # Quantize T1 using percentile mapping
-    quantified = quantize_from_percentile_mapping(
-        t1_data,
-        percentile_map=t1_mapping
-    )
+        # Overlay segmentation labels
+        output = quantified.copy()
+        for seg_label, new_value in seg_mapping.items():
+            output[seg_data == int(seg_label)] = int(new_value)
 
-    # Overlay segmentation labels
-    output = quantified.copy()
-    for seg_label, new_value in seg_mapping.items():
-        output[seg_data == int(seg_label)] = int(new_value)
-
-    # Save integer NIfTI
-    new_img = nib.Nifti1Image(
-        output.astype(np.int16),
-        affine=t1_img.affine,
-        header=t1_img.header
-    )
-    new_img.set_data_dtype(np.int16)
+        # Save integer NIfTI
+        new_img = nib.Nifti1Image(
+            output.astype(np.int16),
+            affine=t1_img.affine,
+            header=t1_img.header
+        )
+        new_img.set_data_dtype(np.int16)
+    
+    else:
+        new_img = t1_img
 
     nib.save(new_img, output_nifti)
     print(f"Saved output to {output_nifti}")
-
 
 if __name__ == "__main__":
     import argparse

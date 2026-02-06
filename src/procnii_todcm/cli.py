@@ -17,19 +17,19 @@ def main():
 
     parser.add_argument(
         "--mask",
-        required=True,
+        required=False,
         help="Input NIfTI mask, e.g. segmentation (.nii or .nii.gz)"
     )
 
     parser.add_argument(
         "--mapping",
-        required=True,
+        required=False,
         help="Input mapping file to map image and mask intensities to new integer values (.json)"
     )
 
     parser.add_argument(
         "--refdcm",
-        required=True,
+        required=False,
         help="Reference dicom file (.dcm)"
     )
 
@@ -40,7 +40,10 @@ def main():
     )
 
     args = parser.parse_args()
-
+    
+    print('User args are:')
+    print(args)
+    
     ## Create output folder
     outdir = os.path.dirname(args.out)
     dcmdir = os.path.join(outdir, 'dicoms')
