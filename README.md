@@ -8,7 +8,8 @@ Converts processed NIfTI files (`.nii` / `.nii.gz`) to DICOM using `nibabel` and
 ## Installation
 
 >[!NOTE]
->Due to a bug in nii2dcm, we use here a patched version that is installed as a first step
+>Due to a bug in nii2dcm, we use here a patched version that is installed as a first step.
+>
 >Please follow all steps to make sure correct dependencies are installed and used
 
 ```bash
@@ -48,8 +49,10 @@ procnii_todcm \
 ```
 
 >[!NOTE]
->Optionally: Add a reference dicom to cmd:
+>Reference dicom is now optional. The command will work without it. To call it with a reference dicom, add the following line to the command:
+>    ```bash
 >    --refdcm ./test/input/subj1/subj1_slice1.dcm
+>    ```
 
 
 >[!WARNING]
